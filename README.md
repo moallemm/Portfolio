@@ -21,7 +21,7 @@ A modern, responsive personal portfolio website built with React, Vite, Tailwind
 - **Styling**: Tailwind CSS 3
 - **Animations**: Framer Motion 10
 - **Icons**: Lucide React
-- **Deployment**: Vercel (recommended)
+- **Deployment**: Github
 
 ## 📁 Project Structure: View FILE_STRUCTURE_OVERVIEW.txt
 
