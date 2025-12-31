@@ -206,7 +206,7 @@ export const portfolioData = {
 
   // Resume
   resume: {
-    url: "/Mohamad Moallem_CV_2025.pdf", // Update this path
+    url: "/Portfolio/Mohamad Moallem_CV_2025.pdf", // Update this path
     downloadText: "Download My Resume",
   },
 };
