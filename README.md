@@ -1,6 +1,6 @@
 # 🚀 Mohamad Moallem - Modern Portfolio Website
 
-A modern, responsive personal portfolio website built with React, Vite, Tailwind CSS, and Framer Motion. Showcase your skills, experience, projects, and connect with potential employers and collaborators.
+A modern, responsive personal portfolio website built with React, Vite, Tailwind CSS, and Framer Motion.
 
 ## ✨ Features
 
