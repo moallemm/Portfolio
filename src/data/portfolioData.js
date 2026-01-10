@@ -142,7 +142,7 @@ export const portfolioData = {
       },
       {
         title: "DIY Website using Flask",
-        description: "A web application that provides users with DIY project ideas and step-by-step instructions and videos with an admin panel to add, delete or update porjects as well banning/unbanning users using Flask for backend and MySQL for database management.",
+        description: "A web application that provides users with DIY project ideas and step-by-step instructions and videos with an admin panel to add, delete or update projects as well as banning/unbanning users. Built using Flask for the backend and MySQL for the database management.",
         technologies: ["Python", "Flask", "MySQL", "HTML", "CSS", "JavaScript", "Bootstrap"],
         link: "https://github.com/moallemm/uni_projects/tree/main/webproject",
         image: "https://images.unsplash.com/photo-1526374965328-7f5ae4e8a84e?w=500&h=300&fit=crop",

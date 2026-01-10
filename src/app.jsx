@@ -35,7 +35,7 @@ export default function App() {
             <Education />
             <Contact />
             <Footer />
-            <ChristmasGreeting />
+            {/*<ChristmasGreeting />*/}{/* Uncomment to enable Christmas/New Year Greeting */}
           </>
         )}
       </div>

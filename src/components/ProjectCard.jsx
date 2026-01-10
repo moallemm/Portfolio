@@ -1,8 +1,12 @@
 import { motion } from 'framer-motion';
 import { ExternalLink, Github } from 'lucide-react';
+import { useState } from 'react';
 
 const ProjectCard = ({ project, index }) => {
   const isOngoing = project.progress !== undefined;
+  const [isExpanded, setIsExpanded] = useState(false);
+  const descriptionLength = project.description.length;
+  const shouldShowReadMore = descriptionLength > 150;
 
   return (
     <motion.div
@@ -27,7 +31,27 @@ const ProjectCard = ({ project, index }) => {
         <h3 className="text-2xl font-bold text-text-primary-light dark:text-white mb-2 group-hover:text-accent-light dark:group-hover:text-accent transition-colors">
           {project.title}
         </h3>
-        <p className="text-text-secondary-light dark:text-slate-300 mb-4 line-clamp-3">{project.description}</p>
+        
+        {/* Description with Read More */}
+        <motion.div
+          initial={{ height: 'auto' }}
+          animate={{ height: 'auto' }}
+          transition={{ duration: 0.3 }}
+          className="mb-4 overflow-hidden"
+        >
+          <p className={`text-text-secondary-light dark:text-slate-300 ${!isExpanded && shouldShowReadMore ? 'line-clamp-3' : ''}`}>
+            {project.description}
+          </p>
+        </motion.div>
+
+        {shouldShowReadMore && (
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="text-accent-light dark:text-accent font-semibold hover:underline mb-4 text-sm transition-colors"
+          >
+            {isExpanded ? 'Read Less' : 'Read More'}
+          </button>
+        )}
 
         {/* Highlights */}
         <div className="mb-4 space-y-2">
