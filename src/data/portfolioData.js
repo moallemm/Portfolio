@@ -5,7 +5,7 @@ export const portfolioData = {
   description: "Passionate about AI, Machine Learning, and building intelligent solutions for real-world problems.",
   email: "mohamadmoallem79@gmail.com",
   phone: "+961 71 150 442",
-  location: "Nabatieh , Lebanon",
+  location: "Lebanon",
   profileImage: "https://images.unsplash.com/profile-1765896283238-720af223a46bimage?ixlib=imgixjs-3.3.2&crop=faces&fit=crop&w=500&h=350", // Replace with your own image URL
   
   // Social Links
@@ -44,7 +44,7 @@ export const portfolioData = {
     },
     {
       category: "Web Development",
-      items: ["React", "JavaScript", "Tailwind CSS", "HTML/CSS", "Node.js", "Vite"],
+      items: ["React", "JavaScript", "Tailwind CSS", "HTML/CSS", "Node.js", "Vite", "TypeScript", "REST APIs"],
     },
     {
       category: "Tools & Platforms",
@@ -58,6 +58,10 @@ export const portfolioData = {
       category: "Languages",
       items: ["English (Fluent)", "Arabic (Native)"],
     },
+    {
+      category: "Mobile Development",
+      items: ["Flutter", "Android Studio", "Kotlin", "Java Spring Boot"],
+    }
   ],
 
   // Education
@@ -71,7 +75,6 @@ export const portfolioData = {
       endYear: 2025,
       description: "Focus on machine learning, deep learning, and practical AI applications. Completed comprehensive coursework in data science principles, statistical analysis, data visualization, and programming.",
       achievements: [
-        "GPA: 2.74/4.0",
         "Relevant Coursework: Machine Learning, Deep Learning, NLP, Data Science, Data Visualization, Web Development, Database Management, Cloud Computing, Data Structures and Algorithms, etc...",
       ],
     },
@@ -110,6 +113,23 @@ export const portfolioData = {
         "Clear detailed technical documentation & reporting",
       ],
     },
+    {
+      company: "Upgrade Your Game",
+      logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN2LUFCCz1ruaZ62tUY3-kVybcOSqkYab0--BKlfeepA&s=10",
+      position: "Wordpress Developer and Content Optimization Intern",
+      startDate: "Jan 2026",
+      endDate: "May 2026",
+      location: "Remote",
+      description: "Improved the Upgrade Your Game Platform by optemizing and redeigning multiple wordpress pages and posts to improve user experience, SEO, and overall performance.",
+      achievements: [
+        "Redesigned and optimized multiple Wordpress pages and posts",
+        "Improved SEO performance through keyword optimization and meta tags",
+        "Enhanced user experience by implementing responsive design and improving page load speed",
+        "utilized analytics tools like google search console and google analytics to monitor and analyze website traffic, user behavior and track search visibility and performance",
+        "Assisted with basic website adminstration tasks by reveiwing siteground hosting settings, updating plugins and themes, and ensuring website security and backups",
+        "conducted content audits and implemented improvements to existing content to enhance readability, engagement, and to align with SEO best practices",
+      ],
+    }
   ],
 
   // Projects
