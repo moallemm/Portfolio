@@ -1,0 +1,21 @@
+<!-- Public assets directory -->
+
+This folder contains static assets that are publicly accessible.
+
+## What goes here:
+- resume.pdf - Your resume (download)
+- favicon.ico - Browser tab icon
+- Images (if hosting locally)
+- Any other static files
+
+## Resume Setup:
+1. Convert your resume to PDF
+2. Name it "resume.pdf"
+3. Place it in this folder
+4. It will be accessible at: /resume.pdf
+
+## Important:
+- Keep files organized
+- Compress images (use TinyPNG)
+- Only include necessary files
+- Don't commit node_modules here
