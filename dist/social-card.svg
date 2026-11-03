@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f5f3ec"/>
+  <path d="M72 70h1056M72 554h1056" stroke="#d9ddd3"/>
+  <text x="74" y="116" fill="#214b3f" font-family="Arial,sans-serif" font-size="18" letter-spacing="3">DATA SCIENCE · COMPUTER VISION · SOFTWARE</text>
+  <text x="67" y="270" fill="#233d32" font-family="Georgia,serif" font-size="118">Mohamad</text>
+  <text x="67" y="392" fill="#233d32" font-family="Georgia,serif" font-size="118">Moallem<tspan fill="#b17953">.</tspan></text>
+  <text x="74" y="485" fill="#58685e" font-family="Arial,sans-serif" font-size="25">Thoughtful solutions. Built with curiosity.</text>
+  <rect x="899" y="212" width="175" height="175" rx="28" fill="#214b3f"/>
+  <path d="M937 341v-82h18l32 46 32-46h18v82h-21v-44l-29 41-29-41v44z" fill="#f5f3ec"/>
+  <text x="74" y="592" fill="#58685e" font-family="Arial,sans-serif" font-size="17">LEBANON · OPEN TO OPPORTUNITIES</text>
+  <text x="1128" y="592" text-anchor="end" fill="#214b3f" font-family="Arial,sans-serif" font-size="17">moallemm.github.io/Portfolio</text>
+</svg>

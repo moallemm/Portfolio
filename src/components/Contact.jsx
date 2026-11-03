@@ -1,213 +1,279 @@
-import { motion } from 'framer-motion';
-import { useState } from 'react';
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
-import { portfolioData } from '../data/portfolioData';
+import { useEffect, useRef, useState } from 'react';
+import {
+  ArrowUpRight,
+  Check,
+  Copy,
+  Download,
+  Github,
+  Linkedin,
+  Phone,
+  Send,
+} from 'lucide-react';
+import { useLocale } from '../context/LocaleContext';
+import { profile as portfolioData } from '../data/portfolioData';
+
+const FORM_ENDPOINT = 'https://formspree.io/f/mjgblvkr';
+
+const formCopy = {
+  en: {
+    title: 'Leave me a message',
+    name: 'Name',
+    namePlaceholder: 'Your name',
+    email: 'Email',
+    emailPlaceholder: 'you@example.com',
+    subject: 'Subject',
+    subjectPlaceholder: 'What would you like to talk about?',
+    message: 'Message',
+    messagePlaceholder: 'Tell me a little about your idea or opportunity…',
+    submit: 'Send message',
+    sending: 'Sending…',
+    note: 'All fields are required. Your message goes straight to my inbox.',
+    success: 'Thanks for reaching out! Your message has been sent. I’ll get back to you soon.',
+    serviceError: 'Your message couldn’t be sent. Please try again, or email me directly.',
+    networkError: 'The connection was interrupted. Your message is still here. Please try again, or email me directly.',
+    phone: 'Phone',
+  },
+  ar: {
+    title: 'اترك لي رسالة',
+    name: 'الاسم',
+    namePlaceholder: 'اسمك',
+    email: 'البريد الإلكتروني',
+    emailPlaceholder: 'you@example.com',
+    subject: 'الموضوع',
+    subjectPlaceholder: 'ما الذي تود التحدث عنه؟',
+    message: 'الرسالة',
+    messagePlaceholder: 'أخبرني قليلاً عن فكرتك أو الفرصة التي تود مناقشتها…',
+    submit: 'إرسال الرسالة',
+    sending: 'جارٍ الإرسال…',
+    note: 'جميع الحقول مطلوبة. تصل رسالتك مباشرةً إلى بريدي.',
+    success: 'شكراً لتواصلك! تم إرسال رسالتك، وسأرد عليك قريباً.',
+    serviceError: 'تعذّر إرسال رسالتك. حاول مجدداً أو تواصل معي عبر البريد الإلكتروني مباشرةً.',
+    networkError: 'انقطع الاتصال. لا تزال رسالتك محفوظة هنا. حاول مجدداً أو تواصل معي عبر البريد الإلكتروني مباشرةً.',
+    phone: 'الهاتف',
+  },
+};
 
 export default function Contact() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-  });
+  const { t, isArabic } = useLocale();
+  const copy = formCopy[isArabic ? 'ar' : 'en'];
+  const [copyStatus, setCopyStatus] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitMessage, setSubmitMessage] = useState('');
+  const [submission, setSubmission] = useState(null);
+  const submitting = useRef(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  useEffect(() => {
+    if (!copyStatus) return undefined;
+    const timeout = window.setTimeout(() => setCopyStatus(''), 4500);
+    return () => window.clearTimeout(timeout);
+  }, [copyStatus]);
+
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(portfolioData.email);
+      setCopyStatus('success');
+    } catch {
+      setCopyStatus('error');
+    }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    if (submitting.current || !form.reportValidity()) return;
+
+    submitting.current = true;
     setIsSubmitting(true);
+    setSubmission(null);
 
     try {
-      // Using Formspree - update with your form ID
-      const formspreeEndpoint = 'https://formspree.io/f/mjgblvkr';
-      
-      const response = await fetch(formspreeEndpoint, {
+      const values = Object.fromEntries(new FormData(form));
+      const response = await fetch(FORM_ENDPOINT, {
         method: 'POST',
-        body: JSON.stringify(formData),
         headers: {
+          Accept: 'application/json',
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify(values),
       });
 
       if (response.ok) {
-        setSubmitMessage('Message sent successfully! I will get back to you soon.');
-        setFormData({ name: '', email: '', subject: '', message: '' });
-        setTimeout(() => setSubmitMessage(''), 5000);
+        form.reset();
+        setSubmission({ status: 'success', message: 'success' });
       } else {
-        setSubmitMessage('Failed to send message. Please try again.');
+        const result = await response.json().catch(() => null);
+        const details = Array.isArray(result?.errors)
+          ? result.errors.map((error) => error.message).filter(Boolean).join(' ')
+          : typeof result?.error === 'string' ? result.error : '';
+        setSubmission({ status: 'error', message: 'serviceError', details });
       }
-    } catch (error) {
-      console.error('Error:', error);
-      setSubmitMessage('An error occurred. Please try again.');
+    } catch {
+      setSubmission({ status: 'error', message: 'networkError' });
     } finally {
+      submitting.current = false;
       setIsSubmitting(false);
     }
   };
 
   return (
-    <section id="contact" className="py-20 bg-secondary-light dark:bg-secondary">
-      <div className="max-w-6xl mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 gradient-text">Get In Touch</h2>
-          <div className="h-1 w-20 bg-accent mb-12"></div>
-        </motion.div>
+    <section id="contact" className="contact-section" aria-labelledby="contact-title">
+      <div className="container">
+        <div className="contact-top">
+          <p className="eyebrow">
+            <span className="section-number">06</span>
+            {t.contact.eyebrow}
+          </p>
+          <span className="contact-availability">
+            <span className="status-dot" aria-hidden="true" />
+            {t.contact.availability}
+          </span>
+        </div>
 
-        <div className="grid md:grid-cols-2 gap-12">
-          {/* Contact Info */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="space-y-8"
-          >
-            <div>
-              <h3 className="text-2xl font-bold text-text-primary-light dark:text-white mb-6">Let's Connect</h3>
-              <p className="text-text-secondary-light dark:text-slate-300 mb-8">
-                I'm always interested in hearing about new opportunities and projects. Feel free to reach out!
-              </p>
-            </div>
-
-            <div className="space-y-6">
-              <div className="flex items-start gap-4">
-                <Mail className="text-accent mt-1 flex-shrink-0" size={24} />
-                <div>
-                  <h4 className="text-text-primary-light dark:text-white font-semibold mb-1">Email</h4>
-                  <a href={`mailto:${portfolioData.socials.email}`} 
-                  className="text-text-secondary-light dark:text-slate-400 hover:text-accent-light dark:hover:text-accent transition-colors"
-                  target='_blank'>
-                    {portfolioData.socials.email}
-                  </a>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <Phone className="text-accent mt-1 flex-shrink-0" size={24} />
-                <div>
-                  <h4 className="text-text-primary-light dark:text-white font-semibold mb-1">Phone</h4>
-                  <p className="text-text-secondary-light dark:text-slate-400">{portfolioData.phone}</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <MapPin className="text-accent mt-1 flex-shrink-0" size={24} />
-                <div>
-                  <h4 className="text-text-primary-light dark:text-white font-semibold mb-1">Location</h4>
-                  <p className="text-text-secondary-light dark:text-slate-400">{portfolioData.location}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Resume Download */}
-            <motion.a
-              whileHover={{ scale: 1.05 }}
-              href={portfolioData.resume.url}
-              download
-              className="inline-block px-8 py-3 bg-accent text-white rounded-lg font-semibold hover:bg-accent-dark transition-colors"
-            >
-              📄 {portfolioData.resume.downloadText}
-            </motion.a>
-          </motion.div>
-
-          {/* Contact Form */}
-          <motion.form
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            onSubmit={handleSubmit}
-            className="space-y-6"
-          >
-            <div>
-              <label className="block text-text-secondary-light dark:text-slate-300 font-semibold mb-2">Name</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-3 bg-primary-light dark:bg-primary border border-slate-300 dark:border-slate-700 rounded-lg text-text-primary-light dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-accent-light dark:focus:border-accent transition-colors"
-                placeholder="Your name"
-              />
-            </div>
-
-            <div>
-              <label className="block text-text-secondary-light dark:text-slate-300 font-semibold mb-2">Email</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-3 bg-primary-light dark:bg-primary border border-slate-300 dark:border-slate-700 rounded-lg text-text-primary-light dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-accent-light dark:focus:border-accent transition-colors"
-                placeholder="Your email"
-              />
-            </div>
-
-            <div>
-              <label className="block text-text-secondary-light dark:text-slate-300 font-semibold mb-2">Subject</label>
-              <input
-                type="text"
-                name="subject"
-                value={formData.subject}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-3 bg-primary-light dark:bg-primary border border-slate-300 dark:border-slate-700 rounded-lg text-text-primary-light dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-accent-light dark:focus:border-accent transition-colors"
-                placeholder="Subject"
-              />
-            </div>
-
-            <div>
-              <label className="block text-text-secondary-light dark:text-slate-300 font-semibold mb-2">Message</label>
-              <textarea
-                name="message"
-                value={formData.message}
-                onChange={handleChange}
-                required
-                rows="5"
-                className="w-full px-4 py-3 bg-primary-light dark:bg-primary border border-slate-300 dark:border-slate-700 rounded-lg text-text-primary-light dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-accent-light dark:focus:border-accent transition-colors resize-none"
-                placeholder="Your message"
-              ></textarea>
-            </div>
-
-            {submitMessage && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className={`p-4 rounded-lg ${
-                  submitMessage.includes('success')
-                    ? 'bg-green-500/20 text-green-300'
-                    : 'bg-red-500/20 text-red-300'
-                }`}
+        <div className="contact-grid">
+          <div className="contact-info">
+            <h2 id="contact-title">{t.contact.title}</h2>
+            <p className="contact-description">{t.contact.description}</p>
+            <div className="email-row">
+              <a
+                className="contact-email"
+                href={`mailto:${portfolioData.email}`}
+                aria-label={`${t.contact.emailLabel}: ${portfolioData.email}`}
               >
-                {submitMessage}
-              </motion.div>
-            )}
+                <span dir="ltr">{portfolioData.email}</span>
+                <ArrowUpRight size={25} aria-hidden="true" />
+              </a>
+              <button
+                type="button"
+                className="icon-button copy-button"
+                data-copy-email
+                onClick={copyEmail}
+                aria-label={copyStatus === 'success' ? t.contact.copied : t.contact.copy}
+                title={copyStatus === 'success' ? t.contact.copied : t.contact.copy}
+              >
+                {copyStatus === 'success'
+                  ? <Check size={18} aria-hidden="true" />
+                  : <Copy size={18} aria-hidden="true" />}
+              </button>
+            </div>
+            <p
+              className={`copy-status ${copyStatus === 'error' ? 'copy-error' : ''}`}
+              role="status"
+              aria-live="polite"
+            >
+              {copyStatus === 'success'
+                ? t.contact.copied
+                : copyStatus === 'error' ? t.contact.copyError : '\u00a0'}
+            </p>
 
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+            <div className="contact-links">
+              <a href={portfolioData.socials.linkedin} target="_blank" rel="noopener noreferrer">
+                <Linkedin size={18} aria-hidden="true" />
+                {t.contact.linkedin}
+                <ArrowUpRight size={16} aria-hidden="true" />
+              </a>
+              <a href={portfolioData.socials.github} target="_blank" rel="noopener noreferrer">
+                <Github size={18} aria-hidden="true" />
+                {t.contact.github}
+                <ArrowUpRight size={16} aria-hidden="true" />
+              </a>
+              <a href={`${import.meta.env.BASE_URL}Mohamad%20Moallem_CV_2026.pdf`} download>
+                <Download size={18} aria-hidden="true" />
+                {t.contact.resume}
+                <ArrowUpRight size={16} aria-hidden="true" />
+              </a>
+              <a
+                href={`tel:${portfolioData.phone.replaceAll(' ', '')}`}
+                aria-label={`${copy.phone}: ${portfolioData.phone}`}
+              >
+                <Phone size={17} aria-hidden="true" />
+                <span dir="ltr">{portfolioData.phone}</span>
+                <ArrowUpRight size={16} aria-hidden="true" />
+              </a>
+            </div>
+          </div>
+
+          <form
+            id="contact-form"
+            className="contact-form"
+            action={FORM_ENDPOINT}
+            method="POST"
+            onSubmit={handleSubmit}
+            aria-labelledby="contact-form-title"
+            aria-busy={isSubmitting}
+          >
+            <h3 id="contact-form-title" className="contact-form-heading">{copy.title}</h3>
+            <div className="form-grid">
+              <div className="form-field">
+                <label htmlFor="contact-name">{copy.name}</label>
+                <input
+                  id="contact-name"
+                  name="name"
+                  type="text"
+                  autoComplete="name"
+                  placeholder={copy.namePlaceholder}
+                  dir="auto"
+                  required
+                />
+              </div>
+              <div className="form-field">
+                <label htmlFor="contact-email">{copy.email}</label>
+                <input
+                  id="contact-email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  placeholder={copy.emailPlaceholder}
+                  dir="ltr"
+                  required
+                />
+              </div>
+            </div>
+            <div className="form-field">
+              <label htmlFor="contact-subject">{copy.subject}</label>
+              <input
+                id="contact-subject"
+                name="subject"
+                type="text"
+                placeholder={copy.subjectPlaceholder}
+                dir="auto"
+                required
+              />
+            </div>
+            <div className="form-field">
+              <label htmlFor="contact-message">{copy.message}</label>
+              <textarea
+                id="contact-message"
+                name="message"
+                placeholder={copy.messagePlaceholder}
+                rows={5}
+                dir="auto"
+                required
+              />
+            </div>
+            <p className="contact-form-note">{copy.note}</p>
+            <p
+              className="form-status"
+              data-contact-status
+              data-status={submission?.status || undefined}
+              role="status"
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              {submission && (
+                <>
+                  {copy[submission.message]}
+                  {submission.details && <span> {submission.details}</span>}
+                </>
+              )}
+            </p>
+            <button
+              className="button button-primary contact-submit"
               type="submit"
               disabled={isSubmitting}
-              className="w-full px-8 py-3 bg-accent text-white rounded-lg font-semibold hover:bg-accent-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-              <Send size={20} />
-              {isSubmitting ? 'Sending...' : 'Send Message'}
-            </motion.button>
-          </motion.form>
+              <Send size={17} aria-hidden="true" />
+              {isSubmitting ? copy.sending : copy.submit}
+            </button>
+          </form>
         </div>
       </div>
     </section>

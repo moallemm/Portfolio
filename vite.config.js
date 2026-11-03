@@ -1,7 +1,8 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { BASE_PATH } from './scripts/site-config.mjs'
 
 export default defineConfig({
-  base: '/Portfolio/',
+  base: BASE_PATH,
   plugins: [react()],
 })
