@@ -1,12 +1,33 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Mohamad Moallem - Data Science & AI Engineer Portfolio" />
-    <meta name="keywords" content="data science, AI, machine learning, portfolio" />
-    <title>Mohamad Moallem - Portfolio</title>
+    <link rel="icon" type="image/svg+xml" href="%BASE_URL%favicon.svg" />
+    <link rel="stylesheet" href="/fonts/fonts.css" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f5f3ec" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#171e1b" media="(prefers-color-scheme: dark)" />
+    <script>
+      (() => {
+        let saved;
+        try { saved = localStorage.getItem('theme'); } catch {}
+        const prefersDark = typeof matchMedia === 'function' && matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = saved === 'light' || saved === 'dark' ? saved : prefersDark ? 'dark' : 'light';
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.classList.toggle('dark', theme === 'dark');
+        document.documentElement.style.colorScheme = theme;
+      })();
+    </script>
+    <!-- seo:start -->
+    <title>Mohamad Moallem | Data Scientist &amp; Software Developer</title>
+    <meta name="description" content="Mohamad Moallem, a data scientist and software developer in Lebanon. Explore computer vision, machine learning, and web development projects, including SafeWalk AI." />
+    <meta name="author" content="Mohamad Moallem" />
+    <link rel="canonical" href="https://moallemm.github.io/Portfolio/" />
+    <link rel="alternate" hreflang="en" href="https://moallemm.github.io/Portfolio/" />
+    <link rel="alternate" hreflang="ar" href="https://moallemm.github.io/Portfolio/ar/" />
+    <link rel="alternate" hreflang="x-default" href="https://moallemm.github.io/Portfolio/" />
+    <!-- seo:end -->
   </head>
   <body>
     <div id="root"></div>

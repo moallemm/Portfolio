@@ -1,19 +1,22 @@
-// Portfolio Data - Update this with your actual information
-export const portfolioData = {
+// Shared identity for the live portfolio and search metadata.
+export const profile = {
   name: "Mohamad Moallem",
-  title: "Data Scientist / Software Developer / Computer Vision Enthusiast",
-  description: "Passionate about AI, Machine Learning, and building intelligent solutions for real-world problems.",
   email: "mohamadmoallem79@gmail.com",
   phone: "+961 71 150 442",
   location: "Lebanon",
-  profileImage: "https://images.unsplash.com/profile-1765896283238-720af223a46bimage?ixlib=imgixjs-3.3.2&crop=faces&fit=crop&w=500&h=350", // Replace with your own image URL
-  
-  // Social Links
   socials: {
     github:"https://github.com/moallemm",
     linkedin:"https://www.linkedin.com/in/mohamad-moallem-ds/",
     email:"mohamadmoallem79@gmail.com",
   },
+};
+
+// Retained data for the original components. The redesigned copy lives in content.js.
+export const portfolioData = {
+  ...profile,
+  title: "Data Scientist / Software Developer / Computer Vision Enthusiast",
+  description: "Passionate about AI, Machine Learning, and building intelligent solutions for real-world problems.",
+  profileImage: "https://images.unsplash.com/profile-1765896283238-720af223a46bimage?ixlib=imgixjs-3.3.2&crop=faces&fit=crop&w=500&h=350",
 
   // About Section
   about: {
