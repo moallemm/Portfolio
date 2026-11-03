@@ -60,6 +60,10 @@ export async function verifyBuild() {
   assert.equal(resume.subarray(0, 5).toString(), '%PDF-', 'Downloadable CV is a PDF');
   await access(new URL('social-card.png', dist));
   await access(new URL('.nojekyll', dist));
+  const verificationFile = 'googlee39d46c1a56b8326.html';
+  const verificationSource = await readFile(new URL(`../public/${verificationFile}`, import.meta.url));
+  const verificationOutput = await readFile(new URL(verificationFile, dist));
+  assert.deepEqual(verificationOutput, verificationSource, 'Google verification file is copied unchanged');
   const image = await readFile(new URL('social-card.png', dist));
   assert.equal(image.subarray(1, 4).toString(), 'PNG', 'Social preview is a PNG');
   assert.equal(image.readUInt32BE(16), 1200, 'Social preview width');

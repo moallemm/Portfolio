@@ -8,8 +8,7 @@
     "dev": "node scripts/serve.mjs",
     "build": "node scripts/build.mjs",
     "check:seo": "node scripts/verify-build.mjs",
-    "preview": "node scripts/serve.mjs preview",
-    "deploy": "npm run build && gh-pages -d dist --nojekyll"
+    "preview": "node scripts/serve.mjs preview"
   },
   "dependencies": {
     "framer-motion": "^10.16.4",

@@ -52,13 +52,20 @@ The `homepage` field in `package.json` is the source for Vite's base path, canon
 
 The current target is [moallemm.github.io/Portfolio/](https://moallemm.github.io/Portfolio/). GitHub Pages supports the generated static files directly; `/ar/index.html` makes Arabic refreshes and direct visits work without a client-side routing fallback. See [GitHub's Pages documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages).
 
-When you are ready to publish:
+Publishing is handled by `.github/workflows/deploy.yml`. In the repository's **Settings → Pages → Build and deployment → Source**, select **GitHub Actions** once. The workflow installs the committed lockfile with `npm ci`, builds and validates both languages with Node.js 22, uploads only `dist`, and deploys the artifact to the `github-pages` environment.
+
+Commit and push source changes to `main`, or merge a pull request into `main`, to publish automatically. You can also run **Deploy to GitHub Pages** manually from the Actions tab, choosing `main`. The deployment job runs only for `main`; the environment's deployment branch rules must permit that branch.
+
+To check the production build locally:
 
 ```sh
-npm run deploy
+npm run build
+npm run preview
 ```
 
-This builds, validates, and publishes `dist` to the existing repository's `gh-pages` branch. It adds `.nojekyll`. In the repository's **Settings → Pages**, select **Deploy from a branch → gh-pages → / (root)** if that is your current publishing setup. If the repository already uses a GitHub Actions workflow, have that workflow run `npm ci` and `npm run build`, and upload `dist`; do not switch publishing sources unnecessarily.
+`dist/` is generated and ignored by Git. Keep `package-lock.json` committed so CI installs reproducibly. The old `npm run deploy` command was removed; publishing no longer pushes build output to the `gh-pages` branch. The source `index.html` is a Vite input, so serving `main / (root)` directly is not a valid production deployment.
+
+The Google ownership file stays in `public/googlee39d46c1a56b8326.html` and is copied unchanged into `dist` on every build. After the deployment succeeds, confirm [the verification URL](https://moallemm.github.io/Portfolio/googlee39d46c1a56b8326.html) loads, then click **Verify** in Search Console. Keep the public file after verification.
 
 After publishing, check both language URLs and the CV download. No deployment is performed just by editing or building this project.
 
